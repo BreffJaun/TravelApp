@@ -13,9 +13,8 @@ struct TravelView: View {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color(red: 0.65, green: 0.85, blue: 1.0),
-                        Color(red: 0.45, green: 0.75, blue: 0.95),
-                        Color(red: 0.60, green: 0.55, blue: 0.90)
+                        Color("PrimaryGradientStart"),
+                        Color("PrimaryGradientEnd")
                     ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing

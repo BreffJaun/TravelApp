@@ -10,7 +10,7 @@ import SwiftData
 import UIKit
 
 struct TabBarView: View {
-  
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     init() {
         UITabBar.appearance().tintColor = UIColor(named: "IconAccent")
