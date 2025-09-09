@@ -52,6 +52,10 @@ struct LoginView: View {
                             .padding(12)
                             .background(.ultraThinMaterial)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                            )
                             .foregroundColor(.primary)
                     }
                     .padding(.horizontal)
@@ -83,6 +87,10 @@ struct LoginView: View {
                         .padding(12)
                         .background(.ultraThinMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                        )
                     }
                     .padding(.horizontal)
                     

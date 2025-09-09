@@ -12,6 +12,7 @@ struct AuthView: View {
     
     var body: some View {
         if authViewModel.loggedInUser == nil {
+//        if false {
             LoginView()
                 .environmentObject(authViewModel)
         } else {
@@ -24,3 +25,6 @@ struct AuthView: View {
 #Preview {
     AuthView()
 }
+
+//testuser@mail.com
+//test123
