@@ -11,7 +11,7 @@ import SwiftUI
 struct ReiseappApp: App {
     var body: some Scene {
         WindowGroup {
-            AuthView()
+            AuthView(useLocalRepository: false)
         }
     }
 }

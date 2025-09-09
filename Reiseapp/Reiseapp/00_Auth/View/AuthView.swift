@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct AuthView: View {
-    @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var authViewModel: AuthViewModel
+    
+    init(useLocalRepository: Bool) {
+        if useLocalRepository {
+            _authViewModel = StateObject(
+                wrappedValue: AuthViewModel(repository: LocalUserRepository())
+            )
+        } else {
+            _authViewModel = StateObject(
+                wrappedValue: AuthViewModel(repository: RemoteUserRepository())
+            )
+        }
+    }
     
     var body: some View {
-        if authViewModel.loggedInUser == nil {
-//        if false {
+//        if authViewModel.loggedInUser == nil {
+        if false {
             LoginView()
                 .environmentObject(authViewModel)
         } else {
@@ -23,7 +35,7 @@ struct AuthView: View {
 }
 
 #Preview {
-    AuthView()
+    AuthView(useLocalRepository: true)
 }
 
 //testuser@mail.com

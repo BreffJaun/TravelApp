@@ -10,7 +10,7 @@ import Foundation
 enum AuthError: LocalizedError {
     case invalidEmail
     case invalidCredentials
-    case unknown
+    case unknown(Error) 
     
     var errorDescription: String? {
         switch self {
@@ -18,8 +18,8 @@ enum AuthError: LocalizedError {
             return "Bitte tragen Sie eine gültige E-Mail ein."
         case .invalidCredentials:
             return "Login fehlgeschlagen. Bitte überprüfen Sie die E-Mail oder das Passwort."
-        case .unknown:
-            return "Ein unbekannter Fehler ist aufgetreten."
+        case .unknown(let error):
+            return "Ein unbekannter Fehler ist aufgetreten: \(error.localizedDescription)"
         }
     }
 }

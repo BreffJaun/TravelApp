@@ -11,14 +11,15 @@ import Foundation
 class AuthViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
-    @Published var loggedInUser: User? = nil
+    @Published var loggedInUser: User? = dummyUsers[2] // nil
     @Published var authError: AuthError?
     @Published var showPassword: Bool = false
     
+    private let repository: UserRepository
     
-    
-    // Beispiel-User
-    private var testUsers: [User] = dummyUsers
+    init(repository: UserRepository) {
+        self.repository = repository
+    }
     
     var isLoginDisabled: Bool {
         email.isEmpty || password.isEmpty
@@ -30,11 +31,16 @@ class AuthViewModel: ObservableObject {
             return
         }
         
-        if let user = testUsers.first(where: { $0.email == email && $0.password == password }) {
-            loggedInUser = user
-            authError = nil
-        } else {
-            authError = .invalidCredentials
+        Task {
+            do {
+                let user = try await repository.login(email: email, password: password)
+                loggedInUser = user
+                authError = nil
+            } catch let error as AuthError {
+                authError = error
+            } catch {
+                authError = .unknown(error)
+            }
         }
     }
     

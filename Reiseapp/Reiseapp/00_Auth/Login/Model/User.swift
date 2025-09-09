@@ -14,4 +14,5 @@ struct User: Identifiable, Codable, Equatable {
     var name: String
     var createdAt: Date
     var isDarkMode: Bool
+    var departureLocation: String?
 }
