@@ -7,16 +7,11 @@
 
 import SwiftUI
 import SwiftData
-import UIKit
 
 struct TabBarView: View {
-  
     
-    init() {
-        UITabBar.appearance().tintColor = UIColor(named: "IconAccent")
-    }
-
-    
+    @EnvironmentObject var authViewModel: AuthViewModel
+        
     var body: some View {
         TabView {
             Tab("Reisen", systemImage: "suitcase.fill") {
@@ -43,3 +38,4 @@ struct TabBarView: View {
 #Preview {
     TabBarView()
 }
+
