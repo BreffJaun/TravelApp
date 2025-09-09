@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     
     @Environment(\.colorScheme) private var colorScheme
+    
     @AppStorage("isDarkModeEnabled") private var isDarkModeEnabled = false
     
     @State private var abreiseOrt: String = ""
@@ -21,67 +22,70 @@ struct SettingsView: View {
                 )
                 .ignoresSafeArea()
                 
-                Rectangle()
-                    .fill(.ultraThinMaterial)
-                    .ignoresSafeArea()
-                
-                ScrollView {
-                    
+//                Rectangle()
+//                    .fill(.ultraThinMaterial)
+//                    .ignoresSafeArea()
+
                     VStack(alignment: .leading, spacing: 12) {
                         Label("Persönliche Einstellungen", systemImage: "person.fill")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .padding(.horizontal)
-                        VStack(spacing: 0) {
-                            HStack {
-                                Image(systemName: "airplane.departure")
-                                    .foregroundColor(.accentColor)
-                                TextField("Abreiseort", text: $abreiseOrt)
-                                    .textFieldStyle(.plain)
-                                    .foregroundStyle(.primary)
-                            }
-                            .padding()
-                            Divider()
-                            
-                            HStack {
-                                Image(systemName: colorScheme == .dark ? "moon.fill" : "sun.max.fill")
-                                    .foregroundColor(.accentColor)
-                                Toggle(isDarkModeEnabled ? "Dark Mode" : "Light Mode", isOn: $isDarkModeEnabled)
-                                    .onChange(of: isDarkModeEnabled) { _, newValue in
-                                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                           let window = windowScene.windows.first {
-                                            window.overrideUserInterfaceStyle = newValue ? .dark : .light
+                            .padding(.top, 16)
+                        
+                        VStack {
+                            VStack(spacing: 0) {
+                                HStack {
+                                    Image(systemName: "airplane.departure")
+                                        .foregroundColor(.accentColor)
+                                    TextField("Abreiseort", text: $abreiseOrt)
+                                        .textFieldStyle(.plain)
+                                        .foregroundColor(.primary)
+                                        
+                                }
+                               .padding()
+                                Divider()
+                                
+                                HStack {
+                                    Image(systemName: colorScheme == .dark ? "moon.fill" : "sun.max.fill")
+                                        .foregroundColor(.accentColor)
+                                    Toggle(isDarkModeEnabled ? "Dark Mode" : "Light Mode", isOn: $isDarkModeEnabled)
+                                        .onChange(of: isDarkModeEnabled) { _, newValue in
+                                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                               let window = windowScene.windows.first {
+                                                window.overrideUserInterfaceStyle = newValue ? .dark : .light
+                                            }
                                         }
-                                    }
+                                }
+                                .preferredColorScheme(isDarkModeEnabled ? .dark : .light)
+                                .padding()
+                                Divider()
+                                
+                                HStack {
+                                    Image(systemName: "person.crop.circle.badge.checkmark")
+                                        .foregroundColor(.accentColor)
+                                    Toggle("Senden der Benutzerdaten", isOn: $benutzerDaten)
+                                }
+                                .padding()
                             }
-                            .preferredColorScheme(isDarkModeEnabled ? .dark : .light)
-                            .padding()
-                            Divider()
-                            
-                            HStack {
-                                Image(systemName: "person.crop.circle.badge.checkmark")
-                                    .foregroundColor(.accentColor)
-                                Toggle("Senden der Benutzerdaten", isOn: $benutzerDaten)
-                            }
-                            .padding()
-                            .foregroundStyle(.primary)
                         }
-                        .background(.white)
+                        .background(Color(.systemBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(radius: 1)
                         .padding(.horizontal)
                         
                         Text("Ihre Benutzerdaten werden anonymisiert verarbeitet, um die Qualität von TravelMate stets verbessern zu können.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .padding(.horizontal)
-                    }
-                    .padding()
+                        Spacer()
+                        
                     VStack(alignment: .leading, spacing: 12) {
                         Label("Hilfe", systemImage: "questionmark.circle.fill")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .padding(.horizontal)
-                        
+                            
                         VStack(spacing: 0) {
                             Button(action: {
                                 if let url = URL(string: "https://www.google.de") {
@@ -113,8 +117,9 @@ struct SettingsView: View {
                                 .padding()
                             }
                         }
-                        .background(.white)
+                        .background(Color(.systemBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(radius: 1)
                         .padding(.horizontal)
                         
                         Text("Unsere Hotline erreichen Sie Mo-Mi 9:00 - 13:30")
@@ -126,7 +131,7 @@ struct SettingsView: View {
                         
                             .padding(.vertical)
                     }
-                }
+               }
             }
             .navigationTitle("Einstellungen")
         }
