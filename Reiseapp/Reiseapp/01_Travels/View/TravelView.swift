@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TravelView: View {
     
-    @StateObject private var viewModel = TravelViewModel()
+    @EnvironmentObject private var travelViewModel: TravelViewModel
     @State private var selectedTrip: Trip?
     
     var body: some View {
@@ -30,7 +30,7 @@ struct TravelView: View {
                     .ignoresSafeArea()
                 
                 List {
-                    ForEach(viewModel.trips) { trip in
+                    ForEach(travelViewModel.trips) { trip in
                         TravelListItemView(trip: trip)
                             .onTapGesture {
                                 selectedTrip = trip

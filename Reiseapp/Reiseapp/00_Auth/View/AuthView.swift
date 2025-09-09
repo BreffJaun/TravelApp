@@ -8,22 +8,36 @@
 import SwiftUI
 
 struct AuthView: View {
-    @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var authViewModel: AuthViewModel
+    @StateObject private var travelViewModel = TravelViewModel()
+    
+    init(useLocalRepository: Bool) {
+        if useLocalRepository {
+            _authViewModel = StateObject(
+                wrappedValue: AuthViewModel(repository: LocalUserRepository())
+            )
+        } else {
+            _authViewModel = StateObject(
+                wrappedValue: AuthViewModel(repository: RemoteUserRepository())
+            )
+        }
+    }
     
     var body: some View {
-        if authViewModel.loggedInUser == nil {
-//        if false {
+//        if authViewModel.loggedInUser == nil {
+        if false {
             LoginView()
                 .environmentObject(authViewModel)
         } else {
             TabBarView()
                 .environmentObject(authViewModel)
+                .environmentObject(travelViewModel)
         }
     }
 }
 
 #Preview {
-    AuthView()
+    AuthView(useLocalRepository: true)
 }
 
 //testuser@mail.com
