@@ -23,7 +23,7 @@ struct TabBarView: View {
             }
             
             Tab("Wetter", systemImage: "cloud.sun") {
-                WeatherView()
+                WeatherView(repo: MockWeatherRepository())
             }
             
             Tab("Einstellungen", systemImage: "gear") {
