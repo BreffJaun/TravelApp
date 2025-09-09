@@ -22,9 +22,9 @@ struct SettingsView: View {
                 )
                 .ignoresSafeArea()
                 
-//                Rectangle()
-//                    .fill(.ultraThinMaterial)
-//                    .ignoresSafeArea()
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+                    .ignoresSafeArea()
 
                     VStack(alignment: .leading, spacing: 12) {
                         Label("Persönliche Einstellungen", systemImage: "person.fill")
