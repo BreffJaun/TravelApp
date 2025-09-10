@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AuthView: View {
     @StateObject private var authViewModel: AuthViewModel
+    @StateObject private var weatherViewModel: WeatherViewModel
     @StateObject private var travelViewModel = TravelViewModel()
     
     init(useLocalRepository: Bool) {
@@ -16,9 +17,17 @@ struct AuthView: View {
             _authViewModel = StateObject(
                 wrappedValue: AuthViewModel(repository: LocalUserRepository())
             )
+            
+            _weatherViewModel = StateObject(
+                wrappedValue: WeatherViewModel(repo: MockWeatherRepository())
+            )
         } else {
             _authViewModel = StateObject(
                 wrappedValue: AuthViewModel(repository: RemoteUserRepository())
+            )
+            
+            _weatherViewModel = StateObject(
+                wrappedValue: WeatherViewModel(repo: RemoteWeatherRepository())
             )
         }
     }
@@ -32,6 +41,7 @@ struct AuthView: View {
             TabBarView()
                 .environmentObject(authViewModel)
                 .environmentObject(travelViewModel)
+                .environmentObject(weatherViewModel)
         }
     }
 }
