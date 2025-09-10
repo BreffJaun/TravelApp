@@ -13,7 +13,7 @@ protocol WeatherRepository {
 
 final class RemoteWeatherRepository: WeatherRepository {
     // TODO: Ersetze durch sicheren Key-Mechanismus
-    private let apiKey = "DEIN_API_KEY"
+    private let apiKey = "93db790e8f66e7fa98e77c3b73786def"
 
     func fetchWeather(for city: String) async throws -> WeatherInfo {
         guard let encodedCity = city.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),

@@ -11,6 +11,7 @@ struct TravelView: View {
     
     @EnvironmentObject private var travelViewModel: TravelViewModel
     @State private var selectedTrip: Trip?
+    @State private var showAddNewTripSheet: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -51,11 +52,14 @@ struct TravelView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        print("PREPARING FOR ADD TRIPS...")
+                        showAddNewTripSheet = true
                     }) {
                         Image(systemName: "plus")
                     }
                 }
+            }
+            .sheet(isPresented: $showAddNewTripSheet) {
+                AddNewTripSheet()
             }
         }
     }
