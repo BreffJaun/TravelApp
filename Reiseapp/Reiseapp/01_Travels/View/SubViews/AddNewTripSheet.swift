@@ -10,10 +10,6 @@ struct AddNewTripSheet: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImage: UIImage? = nil
     
-    var preisGesamt: Double {
-        addNewTripViewModel.preisProPerson * Double(addNewTripViewModel.reisendePersonen.count)
-    }
-    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -81,7 +77,7 @@ struct AddNewTripSheet: View {
                             HStack {
                                 Text("Ticketpreis pro Person (€)")
                                 Spacer()
-                                TextField("0,00", value: $preisProPerson, format: .number)
+                                TextField("0,00", value: $addNewTripViewModel.preisProPerson, format: .number)
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .frame(width: 100)
@@ -91,7 +87,7 @@ struct AddNewTripSheet: View {
                             HStack {
                                 Text("Gesamtpreis")
                                 Spacer()
-                                Text(String(format: "%.2f € für %d Personen", preisGesamt, reisendePersonen.count))
+                                Text(String(format: "%.2f € für %d Personen", addNewTripViewModel.preisGesamt, addNewTripViewModel.reisendePersonen.count))
                                     .fontWeight(.semibold)
                             }
                             .padding(.horizontal)
@@ -108,11 +104,11 @@ struct AddNewTripSheet: View {
                         
                         VStack(spacing: 0) {
                             HStack {
-                                TextField("Name Mitreisender", text: $neuerMitreisender)
+                                TextField("Name Mitreisender", text: $addNewTripViewModel.neuerMitreisender)
                                 Button(action: {
-                                    if !neuerMitreisender.isEmpty {
-                                        reisendePersonen.append(neuerMitreisender)
-                                        neuerMitreisender = ""
+                                    if !addNewTripViewModel.neuerMitreisender.isEmpty {
+                                        addNewTripViewModel.reisendePersonen.append(addNewTripViewModel.neuerMitreisender)
+                                        addNewTripViewModel.neuerMitreisender = ""
                                     }
                                 }) {
                                     Image(systemName: "plus")
@@ -122,7 +118,7 @@ struct AddNewTripSheet: View {
                             .padding(.horizontal)
                             Divider()
                             
-                            ForEach(reisendePersonen, id: \.self) { name in
+                            ForEach(addNewTripViewModel.reisendePersonen, id: \.self) { name in
                                 Text(name)
                                     .padding(.horizontal)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -165,13 +161,13 @@ struct AddNewTripSheet: View {
         }
         .onChange(of: selectedItem) { newItem in
             Task {
-                if let data = try? await newItem?.loadTransferable(type: Data.self),
+                guard let newItem else { return }
+                if let data = try? await newItem.loadTransferable(type: Data.self),
                    let uiImage = UIImage(data: data) {
                     selectedImage = uiImage
                 }
             }
         }
-
     }
 }
 

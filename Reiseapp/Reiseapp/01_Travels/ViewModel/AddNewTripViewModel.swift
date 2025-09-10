@@ -10,9 +10,17 @@ import Foundation
 class AddNewTripViewModel: ObservableObject {
     @Published var titel: String = ""
     @Published var vonOrt: String = ""
-    @Published var nachOrt: String = ""
+    @Published var zielOrt: String = ""
     @Published var preisProPerson: Double = 0.0
     @Published var reisendePersonen: [String] = []
     @Published var neuerMitreisender: String = ""
     @Published var abreiseDatum: Date = Date()
+    
+    init() {
+        
+    }
+    
+    var preisGesamt: Double {
+        preisProPerson * Double(reisendePersonen.count)
+    }
 }
