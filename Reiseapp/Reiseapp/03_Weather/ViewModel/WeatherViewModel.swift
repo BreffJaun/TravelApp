@@ -60,3 +60,4 @@ final class WeatherViewModel: ObservableObject {
     }
     #endif
 }
+
