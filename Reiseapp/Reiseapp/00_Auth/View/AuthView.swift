@@ -10,7 +10,7 @@ import SwiftUI
 struct AuthView: View {
     @StateObject private var authViewModel: AuthViewModel
     @StateObject private var travelViewModel = TravelViewModel()
-    @StateObject private var addNewTripViewModel = AddNewTripViewModel()
+   // @StateObject private var addNewTripViewModel = AddNewTripViewModel()
     
     init(useLocalRepository: Bool) {
         if useLocalRepository {
@@ -33,7 +33,7 @@ struct AuthView: View {
             TabBarView()
                 .environmentObject(authViewModel)
                 .environmentObject(travelViewModel)
-                .environmentObject(addNewTripViewModel)
+            //    .environmentObject(addNewTripViewModel)
         }
     }
 }

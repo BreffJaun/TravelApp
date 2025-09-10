@@ -3,10 +3,16 @@ import PhotosUI
 
 struct AddNewTripSheet: View {
     
-    @EnvironmentObject private var addNewTripViewModel: AddNewTripViewModel
+   // @EnvironmentObject private var addNewTripViewModel: AddNewTripViewModel
+    @EnvironmentObject private var travelViewModel: TravelViewModel
+    @StateObject private var addNewTripViewModel: AddNewTripViewModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var selectedItem: PhotosPickerItem? = nil
+    
+    init(travelViewModel: TravelViewModel) {
+            _addNewTripViewModel = StateObject(wrappedValue: AddNewTripViewModel(travelViewModel: travelViewModel))
+        }
     
     var body: some View {
         NavigationStack {
@@ -18,14 +24,14 @@ struct AddNewTripSheet: View {
                         photoLibrary: .shared()) {
                             HStack {
                                 Image(systemName: "photo.on.rectangle")
-                                    .foregroundColor(.purple)
+                                    .foregroundColor(.accentColor)
                                 Text("Foto hinzufügen")
-                                    .foregroundColor(.purple)
+                                    .foregroundColor(.accentColor)
                                     .fontWeight(.medium)
                                 Spacer()
                             }
                             .padding()
-                            .background(Color.white)
+                            .background(Color(.systemGray6))
                             .cornerRadius(12)
                             .shadow(color: .gray.opacity(0.2), radius: 5, x: 0, y: 2)
                         }
@@ -115,7 +121,7 @@ struct AddNewTripSheet: View {
                                     Image(systemName: "plus")
                                         .foregroundColor(.white)
                                         .padding(10)
-                                        .background(Color.purple)
+                                        .background(Color.accentColor)
                                         .clipShape(Circle())
                                 }
                             }
@@ -142,13 +148,13 @@ struct AddNewTripSheet: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(10)
-                        .background(Color.purple)
+                        .background(Color.accentColor)
                         .cornerRadius(12)
                         
                         Button("Abbrechen") {
                             dismiss()
                         }
-                        .foregroundColor(.purple)
+                        .foregroundColor(.accentColor)
                         .frame(maxWidth: .infinity)
                         .padding(10)
                         .background(Color(.systemGray5))

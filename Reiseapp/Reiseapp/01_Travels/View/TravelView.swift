@@ -59,7 +59,7 @@ struct TravelView: View {
                 }
             }
             .sheet(isPresented: $showAddNewTripSheet) {
-                AddNewTripSheet()
+                AddNewTripSheet(travelViewModel: travelViewModel)
             }
         }
     }

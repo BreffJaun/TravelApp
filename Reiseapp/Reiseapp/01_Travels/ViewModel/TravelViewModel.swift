@@ -14,34 +14,47 @@ class TravelViewModel: ObservableObject {
     
     @Published private(set) var trips: [Trip] = dummyTrips
     
-    
-    // METHODS
-    func addTrip(title: String, destination: String, imageName: String? = nil) -> Bool {
-        guard canAddTrip(title: title, destination: destination) else { return false }
-        let newTrip = Trip(title: title, destination: destination, imageName: imageName)
-        trips.append(newTrip)
+    func addTrip(_ trip: Trip) -> Bool {
+        guard canAddTrip(trip: trip) else { return false }
+        trips.append(trip)
         return true
     }
-    
-    func canAddTrip(title: String, destination: String) -> Bool {
-        !title.trimmingCharacters(in: .whitespaces).isEmpty &&
-        !destination.trimmingCharacters(in: .whitespaces).isEmpty
+
+    func canAddTrip(trip: Trip) -> Bool {
+        !trip.title.trimmingCharacters(in: .whitespaces).isEmpty &&
+        !trip.departure.trimmingCharacters(in: .whitespaces).isEmpty &&
+        !trip.destination.trimmingCharacters(in: .whitespaces).isEmpty
     }
-        
+    
     func deleteTrip(trip: Trip) {
         trips.removeAll { $0.id == trip.id }
     }
     
-    func updateTrip(_ trip: Trip, title: String, destination: String, imageName: String? = nil) {
+    func updateTrip(
+        _ trip: Trip,
+        title: String,
+        departure: String,
+        destination: String,
+        pricePerPerson: Double,
+        travelers: [String],
+        departureDate: Date,
+        image: UIImage? = nil
+    ) {
         guard let index = trips.firstIndex(where: { $0.id == trip.id }) else { return }
-        trips[index] = Trip(title: title, destination: destination, imageName: imageName)
-    }
         
-    func tripsSortByTitle(sortedByTitle: Bool = false) -> [Trip] {
-        if sortedByTitle {
-            return trips.sorted { $0.title < $1.title }
-        } else {
-            return trips
-        }
+        trips[index] = Trip(
+            id: trip.id,
+            title: title,
+            departure: departure,
+            destination: destination,
+            pricePerPerson: pricePerPerson,
+            travelers: travelers,
+            departureDate: departureDate,
+            image: image
+        )
+    }
+    
+    func tripsSortedByTitle() -> [Trip] {
+        trips.sorted { $0.title < $1.title }
     }
 }

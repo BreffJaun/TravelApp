@@ -10,49 +10,56 @@ import SwiftUI
 
 @MainActor
 class AddNewTripViewModel: ObservableObject {
-    @Published var title: String = ""
-    @Published var vonOrt: String = ""
-    @Published var zielOrt: String = ""
-    @Published var preisProPerson: Double = 0.0
-    @Published var neuerMitreisender: String = ""
-    @Published var reisendePersonen: [String] = []
-    @Published var abreiseDatum: Date = Date()
-    @Published var selectedImage: UIImage? = nil
     
-    @Published private(set) var newTrips: [NewTrip] = []
+    @Published var title: String = ""
+    @Published var departure: String = ""
+    @Published var destination: String = ""
+    @Published var pricePerPerson: Double = 0.0
+    @Published var newTraveler: String = ""
+    @Published var travelers: [String] = []
+    @Published var departureDate: Date = Date()
+    @Published var image: UIImage? = nil
+    
+  
+   private let travelViewModel: TravelViewModel
+    
+    init(travelViewModel: TravelViewModel) {
+        self.travelViewModel = travelViewModel
+    }
     
     var preisGesamt: Double {
-        preisProPerson * Double(reisendePersonen.count)
+        pricePerPerson * Double(travelers.count)
     }
     
     func addNewTrip() {
-        let trip = NewTrip(
+        let newTrip = Trip(
             title: title,
-            vonOrt: vonOrt,
-            zielOrt: zielOrt,
-            preisProPerson: preisProPerson,
-            reisendePersonen: reisendePersonen,
-            abreiseDatum: abreiseDatum,
-            image: selectedImage
+            departure: departure,
+            destination: destination,
+            pricePerPerson: pricePerPerson,
+            travelers: travelers,
+            departureDate: departureDate,
+            image: image
         )
-        newTrips.append(trip)
-        clearFields()
-    }
+        travelViewModel.addTrip(newTrip)
+            clearFields()
+        }
+    
     
     func addMitreisender() {
-        guard !neuerMitreisender.isEmpty else { return }
-        reisendePersonen.append(neuerMitreisender)
-        neuerMitreisender = ""
+        guard !newTraveler.isEmpty else { return }
+        travelers.append(newTraveler)
+        newTraveler = ""
     }
     
     func clearFields() {
         title = ""
-        vonOrt = ""
-        zielOrt = ""
-        preisProPerson = 0.0
-        neuerMitreisender = ""
-        reisendePersonen = []
-        abreiseDatum = Date()
-        selectedImage = nil
+        departure = ""
+        destination = ""
+        pricePerPerson = 0.0
+        newTraveler = ""
+        travelers = []
+        departureDate = Date()
+        image = nil
     }
 }
