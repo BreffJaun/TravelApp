@@ -9,7 +9,8 @@ import Foundation
 
 enum WeatherCondition: String, Equatable {
     case clear, partlyCloudy, cloudy, rain, storm, snow, fog, unknown
-
+    
+    // MARK: - SF Symbol
     var sfSymbol: String {
         switch self {
         case .clear:         return "sun.max.fill"
@@ -22,23 +23,8 @@ enum WeatherCondition: String, Equatable {
         case .unknown:       return "questionmark.circle.fill"
         }
     }
-  
-    static func from(text: String) -> WeatherCondition {
-        
-        let t = text.lowercased()
-            .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
-                  .lowercased()
-        
-        if t.contains("thunder") || t.contains("storm") || t.contains("gewit") { return .storm }
-        if t.contains("rain") || t.contains("regen") { return .rain }
-        if t.contains("snow") || t.contains("schnee") { return .snow }
-        if t.contains("fog") || t.contains("mist") || t.contains("neb") { return .fog }
-        if t.contains("overcast") { return .cloudy }
-        if t.contains("cloud") || t.contains("wolk") { return .partlyCloudy }
-        if t.contains("clear") || t.contains("sun") { return .clear }
-        return .unknown
-    }
     
+    // MARK: - Color für Icon
     var iconColor: Color {
         switch self {
         case .clear:         return .yellow
@@ -52,15 +38,23 @@ enum WeatherCondition: String, Equatable {
         }
     }
     
-    func tempColor(for temperature: Double) -> Color {
-        switch temperature {
-        case ..<0: return .blue
-        case 0..<10: return .cyan
-        case 10..<20: return .green
-        case 20..<30: return .orange
-        default: return .red
-
-    // Primär: ID-Mapping; Fallback: Text (diakritik-unempfindlich)
+    // MARK: - Wetter aus Text
+    static func from(text: String) -> WeatherCondition {
+        let t = text.lowercased()
+            .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
+            .lowercased()
+        
+        if t.contains("thunder") || t.contains("storm") || t.contains("gewit") { return .storm }
+        if t.contains("rain") || t.contains("regen") { return .rain }
+        if t.contains("snow") || t.contains("schnee") { return .snow }
+        if t.contains("fog") || t.contains("mist") || t.contains("neb") { return .fog }
+        if t.contains("overcast") { return .cloudy }
+        if t.contains("cloud") || t.contains("wolk") { return .partlyCloudy }
+        if t.contains("clear") || t.contains("sun") { return .clear }
+        return .unknown
+    }
+    
+    // MARK: - Wetter aus ID + Text
     static func from(id: Int, main: String, description: String) -> WeatherCondition {
         switch id {
         case 200...232: return .storm
@@ -69,13 +63,21 @@ enum WeatherCondition: String, Equatable {
         case 600...622: return .snow
         case 701...781: return .fog
         case 800:       return .clear
-        case 801:       return .partlyCloudy
-        case 802:       return .partlyCloudy
+        case 801...802: return .partlyCloudy
         case 803...804: return .cloudy
         default:
             return from(text: description.isEmpty ? main : description)
         }
     }
+    
+    // MARK: - Temperaturfarben
+    func tempColor(for temperature: Double) -> Color {
+        switch temperature {
+        case ..<0: return .blue
+        case 0..<10: return .cyan
+        case 10..<20: return .green
+        case 20..<30: return .orange
+        default: return .red
+        }
+    }
 }
-
-
