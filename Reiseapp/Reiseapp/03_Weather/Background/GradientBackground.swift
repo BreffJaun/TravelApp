@@ -24,12 +24,13 @@ struct GradientBackground<Content: View>: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
+            .ignoresSafeArea()
+            
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .ignoresSafeArea()
+            
             content
         }
-        .ignoresSafeArea()
     }
 }
-
-//#Preview {
-//    GradientBackground()
-//}

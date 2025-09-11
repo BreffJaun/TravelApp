@@ -12,20 +12,7 @@ struct FlightView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.65, green: 0.85, blue: 1.0),
-                        Color(red: 0.45, green: 0.75, blue: 0.95),
-                        Color(red: 0.60, green: 0.55, blue: 0.90)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-
-                Rectangle().fill(.ultraThinMaterial).ignoresSafeArea()
-
+            GradientBackground {
                 VStack(spacing: 14) {
                     Text("Günstigste Flüge")
                         .font(.title2).bold().foregroundStyle(.white)
