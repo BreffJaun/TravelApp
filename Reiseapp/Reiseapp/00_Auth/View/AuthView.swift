@@ -41,11 +41,7 @@ struct AuthView: View {
             TabBarView()
                 .environmentObject(authViewModel)
                 .environmentObject(travelViewModel)
-<<<<<<< HEAD
-            //    .environmentObject(addNewTripViewModel)
-=======
                 .environmentObject(weatherViewModel)
->>>>>>> main
         }
     }
 }

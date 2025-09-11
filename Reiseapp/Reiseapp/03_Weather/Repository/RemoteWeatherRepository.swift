@@ -9,14 +9,8 @@ import Foundation
 
 
 final class RemoteWeatherRepository: WeatherRepository {
-<<<<<<< HEAD:Reiseapp/Reiseapp/03_Weather/Repository/WeatherRepository.swift
-    // TODO: Ersetze durch sicheren Key-Mechanismus
-    private let apiKey = ""
-
-=======
     private let apiKey = APIKeys.openWeatherMap.rawValue
-    
->>>>>>> main:Reiseapp/Reiseapp/03_Weather/Repository/RemoteWeatherRepository.swift
+
     func fetchWeather(for city: String) async throws -> WeatherInfo {
         guard let encodedCity = city.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string:
