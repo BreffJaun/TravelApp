@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct WeatherView: View {
-    
+
     @EnvironmentObject private var viewModel: WeatherViewModel
   
-
     var body: some View {
         GradientBackground {
             VStack(spacing: 32) {
@@ -65,11 +64,13 @@ struct WeatherView: View {
                             .foregroundStyle(.white.opacity(0.9))
                         Text("Suche starten …")
                             .foregroundStyle(.white.opacity(0.9))
+
                     }
                 }
-
+                
                 Spacer()
             }
+            .ignoresSafeArea(edges: .bottom)
         }
     }
 }
