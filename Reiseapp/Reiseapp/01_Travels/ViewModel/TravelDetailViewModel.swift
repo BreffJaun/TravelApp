@@ -16,6 +16,7 @@ final class TravelDetailViewModel: ObservableObject {
     @Published var weatherError: String?
     
     let trip: Trip
+    let travelViewModel: TravelViewModel
     
     private let weatherRepo: WeatherRepository
     private let dateFormatter: DateFormatter = {
@@ -24,8 +25,9 @@ final class TravelDetailViewModel: ObservableObject {
         return f
     }()
     
-    init(trip: Trip, weatherRepo: WeatherRepository) {
+    init(trip: Trip, travelViewModel: TravelViewModel, weatherRepo: WeatherRepository) {
         self.trip = trip
+        self.travelViewModel = travelViewModel
         self.weatherRepo = weatherRepo
         self.formattedDate = dateFormatter.string(from: trip.departureDate)
     }

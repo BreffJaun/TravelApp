@@ -9,11 +9,20 @@ import SwiftUI
 
 struct TravelDetailView: View {
     
-    @StateObject private var travelDetailViewModel: TravelDetailViewModel
-    
-    init(trip: Trip, weatherRepo: WeatherRepository) {
-        _travelDetailViewModel = StateObject(wrappedValue: TravelDetailViewModel(trip: trip, weatherRepo: weatherRepo))
-    }
+        @StateObject private var travelDetailViewModel: TravelDetailViewModel
+        @EnvironmentObject private var travelViewModel: TravelViewModel
+        @State private var showEditSheet: Bool = false
+        let trip: Trip
+       
+    init(trip: Trip, travelViewModel: TravelViewModel, weatherRepo: WeatherRepository) {
+            _travelDetailViewModel = StateObject(
+                wrappedValue: TravelDetailViewModel(
+                    trip: trip,
+                    travelViewModel: travelViewModel,
+                    weatherRepo: weatherRepo
+                )
+            )
+        }
     // später: @EnvironmentObject private var flightViewModel: FlightViewModel
     
     var body: some View {
@@ -63,6 +72,17 @@ struct TravelDetailView: View {
         .task {
             await travelDetailViewModel.loadWeather()
         }
+        .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Bearbeiten") {
+                            showEditSheet = true
+                        }
+                    }
+                }
+        .sheet(isPresented: $showEditSheet) {
+            AddNewTripSheet(travelViewModel: travelDetailViewModel.travelViewModel)
+        }
+
     }
 }
 

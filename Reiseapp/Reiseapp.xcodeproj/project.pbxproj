@@ -16,6 +16,11 @@
 			path = Reiseapp;
 			sourceTree = "<group>";
 		};
+		E0D91E012E72E7450025F3EE /* API */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = API;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +37,7 @@
 		96DBA62E2D9142BE005693CB = {
 			isa = PBXGroup;
 			children = (
+				E0D91E012E72E7450025F3EE /* API */,
 				96DBA6392D9142BE005693CB /* Reiseapp */,
 				96DBA6382D9142BE005693CB /* Products */,
 			);
@@ -62,6 +68,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				96DBA6392D9142BE005693CB /* Reiseapp */,
+				E0D91E012E72E7450025F3EE /* API */,
 			);
 			name = Reiseapp;
 			packageProductDependencies = (

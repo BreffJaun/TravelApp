@@ -11,6 +11,7 @@ struct TravelView: View {
     
     @EnvironmentObject private var weatherViewModel: WeatherViewModel
     @EnvironmentObject private var travelViewModel: TravelViewModel
+    @EnvironmentObject private var travelDetailViewModel: TravelDetailViewModel
     @State private var selectedTrip: Trip?
     @State private var showAddNewTripSheet: Bool = false
     
