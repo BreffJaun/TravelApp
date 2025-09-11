@@ -169,10 +169,10 @@ struct AddNewTripSheet: View {
             }
             .navigationTitle("Neue Reise")
         }
-        .onChange(of: selectedItem) { newItem in
+        .onChange(of: selectedItem) { _, newValue in
             Task {
-                guard let newItem else { return }
-                if let data = try? await newItem.loadTransferable(type: Data.self),
+                guard let newValue else { return }
+                if let data = try? await newValue.loadTransferable(type: Data.self),
                    let uiImage = UIImage(data: data) {
                     addNewTripViewModel.image = uiImage
                 }
