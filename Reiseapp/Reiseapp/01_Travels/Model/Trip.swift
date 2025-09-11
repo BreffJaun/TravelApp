@@ -6,10 +6,15 @@
 //
 
 import Foundation
+import UIKit
 
 struct Trip: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-    let destination: String
-    let imageName: String?
+  var id = UUID()
+  var title: String
+  var departure: String
+  var destination: String
+  var pricePerPerson: Double
+  var travelers: [String]
+  var departureDate: Date
+  var image: UIImage? = nil
 }

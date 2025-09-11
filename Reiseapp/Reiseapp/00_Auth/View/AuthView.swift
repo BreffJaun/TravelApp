@@ -25,7 +25,7 @@ struct AuthView: View {
             _authViewModel = StateObject(
                 wrappedValue: AuthViewModel(repository: RemoteUserRepository())
             )
-            
+
             _weatherViewModel = StateObject(
                 wrappedValue: WeatherViewModel(repo: RemoteWeatherRepository())
             )

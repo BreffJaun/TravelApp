@@ -7,16 +7,14 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct TravelListItemView: View {
     
     let trip: Trip
     
     var body: some View {
         HStack(spacing: 12) {
-            if let imageName = trip.imageName {
-                Image(imageName)
+            if let imageName = trip.image {
+                Image(uiImage: imageName)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 60, height: 60)
