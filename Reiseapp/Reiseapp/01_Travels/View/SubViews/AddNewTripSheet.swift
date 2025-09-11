@@ -3,7 +3,6 @@ import PhotosUI
 
 struct AddNewTripSheet: View {
     
-   // @EnvironmentObject private var addNewTripViewModel: AddNewTripViewModel
     @EnvironmentObject private var travelViewModel: TravelViewModel
     @StateObject private var addNewTripViewModel: AddNewTripViewModel
     @Environment(\.dismiss) private var dismiss
@@ -36,7 +35,7 @@ struct AddNewTripSheet: View {
                             .shadow(color: .gray.opacity(0.2), radius: 5, x: 0, y: 2)
                         }
                     
-                    if let image = addNewTripViewModel.selectedImage {
+                    if let image = addNewTripViewModel.image {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
@@ -55,12 +54,12 @@ struct AddNewTripSheet: View {
                                 .background(Color(.systemGray6))
                                 .cornerRadius(10)
                             
-                            TextField("Von", text: $addNewTripViewModel.vonOrt)
+                            TextField("Von", text: $addNewTripViewModel.departure)
                                 .padding()
                                 .background(Color(.systemGray6))
                                 .cornerRadius(10)
                             
-                            TextField("Nach", text: $addNewTripViewModel.zielOrt)
+                            TextField("Nach", text: $addNewTripViewModel.destination)
                                 .padding()
                                 .background(Color(.systemGray6))
                                 .cornerRadius(10)
@@ -68,7 +67,7 @@ struct AddNewTripSheet: View {
                             HStack {
                                 Text("Abreisedatum")
                                 Spacer()
-                                DatePicker("", selection: $addNewTripViewModel.abreiseDatum, displayedComponents: [.date])
+                                DatePicker("", selection: $addNewTripViewModel.departureDate, displayedComponents: [.date])
                                     .labelsHidden()
                             }
                             .padding()
@@ -85,7 +84,7 @@ struct AddNewTripSheet: View {
                             HStack {
                                 Text("Ticketpreis pro Person (€)")
                                 Spacer()
-                                TextField("0,00", value: $addNewTripViewModel.preisProPerson, format: .number)
+                                TextField("0,00", value: $addNewTripViewModel.pricePerPerson, format: .number)
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .frame(width: 100)
@@ -96,7 +95,7 @@ struct AddNewTripSheet: View {
                             HStack {
                                 Text("Gesamtpreis")
                                 Spacer()
-                                Text(String(format: "%.2f € für %d Personen", addNewTripViewModel.preisGesamt, addNewTripViewModel.reisendePersonen.count))
+                                Text(String(format: "%.2f € für %d Personen", addNewTripViewModel.totalPrice, addNewTripViewModel.travelers.count))
                                     .fontWeight(.semibold)
                             }
                         }
@@ -111,12 +110,12 @@ struct AddNewTripSheet: View {
                         
                         VStack(spacing: 10) {
                             HStack {
-                                TextField("Name Mitreisender", text: $addNewTripViewModel.neuerMitreisender)
+                                TextField("Name Mitreisender", text: $addNewTripViewModel.newTraveler)
                                     .padding()
                                     .background(Color(.systemGray6))
                                     .cornerRadius(10)
                                 Button(action: {
-                                    addNewTripViewModel.addMitreisender()
+                                    addNewTripViewModel.addTraveler()
                                 }) {
                                     Image(systemName: "plus")
                                         .foregroundColor(.white)
@@ -126,13 +125,16 @@ struct AddNewTripSheet: View {
                                 }
                             }
                             
-                            if !addNewTripViewModel.reisendePersonen.isEmpty {
-                                ForEach(addNewTripViewModel.reisendePersonen, id: \.self) { name in
+                            if !addNewTripViewModel.travelers.isEmpty {
+                                ForEach(addNewTripViewModel.travelers, id: \.self) { name in
                                     HStack {
                                         Text(name)
                                         Spacer()
                                     }
                                     .padding(.horizontal)
+                                    if name != addNewTripViewModel.travelers.last {
+                                                    Divider()
+                                                }
                                 }
                             }
                         }
@@ -172,7 +174,7 @@ struct AddNewTripSheet: View {
                 guard let newItem else { return }
                 if let data = try? await newItem.loadTransferable(type: Data.self),
                    let uiImage = UIImage(data: data) {
-                    addNewTripViewModel.selectedImage = uiImage
+                    addNewTripViewModel.image = uiImage
                 }
             }
         }

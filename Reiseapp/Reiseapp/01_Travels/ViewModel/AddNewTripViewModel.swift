@@ -27,7 +27,7 @@ class AddNewTripViewModel: ObservableObject {
         self.travelViewModel = travelViewModel
     }
     
-    var preisGesamt: Double {
+    var totalPrice: Double {
         pricePerPerson * Double(travelers.count)
     }
     
@@ -46,7 +46,7 @@ class AddNewTripViewModel: ObservableObject {
         }
     
     
-    func addMitreisender() {
+    func addTraveler() {
         guard !newTraveler.isEmpty else { return }
         travelers.append(newTraveler)
         newTraveler = ""
