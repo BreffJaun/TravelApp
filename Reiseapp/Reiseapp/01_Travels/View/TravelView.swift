@@ -9,27 +9,14 @@ import SwiftUI
 
 struct TravelView: View {
     
+    @EnvironmentObject private var weatherViewModel: WeatherViewModel
     @EnvironmentObject private var travelViewModel: TravelViewModel
     @State private var selectedTrip: Trip?
     @State private var showAddNewTripSheet: Bool = false
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color("PrimaryGradientStart"),
-                        Color("PrimaryGradientEnd")
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-                
-                Rectangle()
-                    .fill(.ultraThinMaterial)
-                    .ignoresSafeArea()
-                
+            GradientBackground{
                 List {
                     ForEach(travelViewModel.trips) { trip in
                         TravelListItemView(trip: trip)
@@ -45,7 +32,7 @@ struct TravelView: View {
                 .scrollContentBackground(.hidden)
                 .background(Color.clear)
                 .navigationDestination(item: $selectedTrip) { trip in
-                    TravelDetailView(trip: trip)
+                    TravelDetailView(trip: trip, weatherRepo: weatherViewModel.repo)
                 }
             }
             .navigationTitle("Meine Reisen")

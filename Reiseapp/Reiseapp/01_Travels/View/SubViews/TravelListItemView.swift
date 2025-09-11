@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct TravelListItemView: View {
     
     let trip: Trip

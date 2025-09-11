@@ -7,6 +7,7 @@
 
 import Foundation
 
+import Foundation
 var dummyTrips = [
     Trip(
         title: "Malle ist nur 1 Mal im Jahr",

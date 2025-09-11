@@ -45,18 +45,30 @@ struct LoginView: View {
                             .font(.headline)
                             .foregroundColor(.secondary)
                         
-                        TextField("E-Mail eingeben", text: $authViewModel.email)
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .padding(12)
-                            .background(.ultraThinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                            )
-                            .foregroundColor(.primary)
+                        ZStack(alignment: .trailing) {
+                            TextField("E-Mail eingeben", text: $authViewModel.email)
+                                .keyboardType(.emailAddress)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .padding(12)
+                                .background(.ultraThinMaterial)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                )
+                                .foregroundColor(.primary)
+                            
+                            if !authViewModel.email.isEmpty {
+                                Button {
+                                    authViewModel.email = ""
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.trailing, 8)
+                            }
+                        }
                     }
                     .padding(.horizontal)
                     
@@ -77,6 +89,17 @@ struct LoginView: View {
                             .autocorrectionDisabled()
                             .foregroundColor(.primary)
                             
+                            // Clear-Button nur anzeigen, wenn Passwort nicht leer ist
+                            if !authViewModel.password.isEmpty {
+                                Button {
+                                    authViewModel.password = ""
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            
+                            // Passwort anzeigen/verbergen
                             Button {
                                 authViewModel.showPassword.toggle()
                             } label: {
@@ -93,6 +116,7 @@ struct LoginView: View {
                         )
                     }
                     .padding(.horizontal)
+                    
                     
                     if let error = authViewModel.authError {
                         Text(error.localizedDescription)
@@ -121,7 +145,7 @@ struct LoginView: View {
                         .buttonStyle(.bordered)
                     }
                     .padding(.horizontal)
-
+                    
                     Spacer()
                 }
                 .padding(.top, 32)
@@ -134,3 +158,4 @@ struct LoginView: View {
 #Preview {
     LoginView()
 }
+

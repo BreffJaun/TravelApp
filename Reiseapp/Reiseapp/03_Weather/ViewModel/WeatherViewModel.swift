@@ -14,7 +14,7 @@ final class WeatherViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
 
-    private let repo: WeatherRepository
+    let repo: WeatherRepository
 
     init(repo: WeatherRepository) {
         self.repo = repo
@@ -60,3 +60,4 @@ final class WeatherViewModel: ObservableObject {
     }
     #endif
 }
+

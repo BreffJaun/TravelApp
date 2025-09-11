@@ -8,19 +8,15 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @StateObject private var vm: WeatherViewModel
 
-    // Dependency Injection per Initializer
-    init(repo: WeatherRepository) {
-        _vm = StateObject(wrappedValue: WeatherViewModel(repo: repo))
-    }
-
+    @EnvironmentObject private var viewModel: WeatherViewModel
+  
     var body: some View {
         GradientBackground {
             VStack(spacing: 32) {
                 Spacer()
 
-                TextField("Ort eingeben", text: $vm.city)
+                TextField("Ort eingeben", text: $viewModel.city)
                     .textFieldStyle(.plain)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 12)
@@ -30,12 +26,12 @@ struct WeatherView: View {
                             .stroke(.white.opacity(0.25))
                     }
                     .submitLabel(.search)
-                    .onSubmit { Task { await vm.loadWeather() } }
+                    .onSubmit { Task { await viewModel.loadWeather() } }
                     .padding(.horizontal, 32)
 
-                if vm.isLoading {
+                if viewModel.isLoading {
                     ProgressView().tint(.white)
-                } else if let info = vm.info {
+                } else if let info = viewModel.info {
                     VStack(spacing: 16) {
                         Image(systemName: info.condition.sfSymbol)
                             .font(.system(size: 110))
@@ -56,7 +52,7 @@ struct WeatherView: View {
                             .foregroundStyle(.white.opacity(0.9))
                     }
                     .transition(.opacity.combined(with: .scale))
-                } else if let err = vm.errorMessage {
+                } else if let err = viewModel.errorMessage {
                     Text(err)
                         .foregroundStyle(.white)
                         .padding(.horizontal)
@@ -68,14 +64,16 @@ struct WeatherView: View {
                             .foregroundStyle(.white.opacity(0.9))
                         Text("Suche starten …")
                             .foregroundStyle(.white.opacity(0.9))
+
                     }
                 }
-
+                
                 Spacer()
             }
+            .ignoresSafeArea(edges: .bottom)
         }
     }
 }
 #Preview() {
-    WeatherView(repo: MockWeatherRepository())
+    WeatherView()
 }
