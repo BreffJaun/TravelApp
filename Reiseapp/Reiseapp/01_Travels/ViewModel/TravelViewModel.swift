@@ -14,8 +14,11 @@ class TravelViewModel: ObservableObject {
     
     @Published var trips: [Trip] = dummyTrips
     
+<<<<<<< HEAD
+=======
     // MARK: - METHODS
     
+>>>>>>> main
     func addTrip(_ trip: Trip) -> Bool {
         guard canAddTrip(trip: trip) else { return false }
         trips.append(trip)
@@ -45,7 +48,11 @@ class TravelViewModel: ObservableObject {
         guard let index = trips.firstIndex(where: { $0.id == trip.id }) else { return }
         
         trips[index] = Trip(
+<<<<<<< HEAD
+            id: trip.id,
+=======
             id: trip.id, // wichtig, damit die ID gleich bleibt
+>>>>>>> main
             title: title,
             departure: departure,
             destination: destination,

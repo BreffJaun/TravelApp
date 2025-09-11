@@ -73,3 +73,13 @@ var dummyTrips = [
         image: nil
     )
 ]
+
+
+
+
+
+
+
+
+
+
