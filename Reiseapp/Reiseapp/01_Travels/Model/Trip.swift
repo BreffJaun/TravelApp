@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct Trip: Identifiable, Hashable {
+struct Trip: Identifiable, Hashable, Codable {
     var id = UUID()
     var title: String
     var departure: String
@@ -16,5 +16,15 @@ struct Trip: Identifiable, Hashable {
     var pricePerPerson: Double
     var travelers: [String]
     var departureDate: Date
-    var image: UIImage? = nil
-}
+    var imageData: Data? = nil
+    
+    var image: UIImage? {
+            get {
+                guard let imageData else { return nil }
+                return UIImage(data: imageData)
+            }
+            set {
+                imageData = newValue?.jpegData(compressionQuality: 0.8)
+            }
+        }
+    }
