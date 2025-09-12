@@ -44,8 +44,8 @@ struct AuthView: View {
     }
     
     var body: some View {
-//        if authViewModel.loggedInUser == nil {
-        if false {
+        if authViewModel.loggedInUser == nil {
+//        if false {
             LoginView()
                 .environmentObject(authViewModel)
         } else {

@@ -11,8 +11,8 @@ import Foundation
 class AuthViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
-    @Published var loggedInUser: User? = dummyUsers[2]
-//    @Published var loggedInUser: User? = nil
+//    @Published var loggedInUser: User? = dummyUsers[2]
+    @Published var loggedInUser: User? = nil
     @Published var authError: AuthError?
     @Published var showPassword: Bool = false
     
