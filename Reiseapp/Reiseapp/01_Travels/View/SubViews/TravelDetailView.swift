@@ -9,8 +9,10 @@ import SwiftUI
 
 struct TravelDetailView: View {
     
-    @StateObject private var travelDetailViewModel: TravelDetailViewModel
+    @EnvironmentObject private var travelViewModel: TravelViewModel
     @EnvironmentObject private var flightViewModel: FlightViewModel
+    @StateObject private var travelDetailViewModel: TravelDetailViewModel
+    
     @State private var showEditSheet: Bool = false
     let trip: Trip
 
