@@ -1,19 +1,26 @@
+//
+//  EditTripSheetView.swift
+//  Reiseapp
+//
+//  Created by Romina Reiber on 11.09.25.
+//
+
+import SwiftUI
+
 import SwiftUI
 import PhotosUI
 
-struct AddNewTripSheet: View {
+struct EditTripSheet: View {
     
-    @EnvironmentObject private var travelViewModel: TravelViewModel
-    @StateObject private var addNewTripViewModel: AddNewTripViewModel
     @Environment(\.dismiss) private var dismiss
-    
-    
+    @StateObject private var addNewTripViewModel: AddNewTripViewModel
     @State private var selectedItem: PhotosPickerItem? = nil
     
-    init(travelViewModel: TravelViewModel) {
-        _addNewTripViewModel = StateObject(wrappedValue: AddNewTripViewModel(travelViewModel: travelViewModel))
-    }
-    
+    init(travelViewModel: TravelViewModel, trip: Trip) {
+            _addNewTripViewModel = StateObject(
+                wrappedValue: AddNewTripViewModel(travelViewModel: travelViewModel, trip: trip)
+            )
+        }
     
     var body: some View {
         NavigationStack {
@@ -27,7 +34,7 @@ struct AddNewTripSheet: View {
                                 HStack {
                                     Image(systemName: "photo.on.rectangle")
                                         .foregroundColor(.accentColor)
-                                    Text("Foto hinzufügen")
+                                    Text("Foto ändern")
                                         .foregroundColor(.accentColor)
                                         .fontWeight(.medium)
                                     Spacer()
@@ -147,7 +154,7 @@ struct AddNewTripSheet: View {
                         }
                         HStack(spacing: 15) {
                             Button("Speichern") {
-                                addNewTripViewModel.addNewTrip()
+                                addNewTripViewModel.updateTrip()
                                 dismiss()
                             }
                             .foregroundColor(.white)
@@ -165,28 +172,25 @@ struct AddNewTripSheet: View {
                             .background(Color(.systemGray5))
                             .cornerRadius(12)
                         }
-                        
                     }
                     .padding(.horizontal)
                     .padding(.top, 20)
                 }
-                .navigationTitle("Neue Reise")
             }
-            .onChange(of: selectedItem) { _, newValue in
-                Task {
-                    guard let newValue else { return }
-                    if let data = try? await newValue.loadTransferable(type: Data.self),
-                       let uiImage = UIImage(data: data) {
-                        addNewTripViewModel.image = uiImage
-                    }
+            .navigationTitle("Reise bearbeiten")
+        }
+        .onChange(of: selectedItem) { _, newValue in
+            Task {
+                guard let newValue else { return }
+                if let data = try? await newValue.loadTransferable(type: Data.self),
+                   let uiImage = UIImage(data: data) {
+                    addNewTripViewModel.image = uiImage
                 }
             }
         }
     }
 }
 
-
-
 //#Preview {
-//   AddNewTripSheet()
+//    EditTripSheet()
 //}

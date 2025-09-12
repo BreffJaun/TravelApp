@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct TravelView: View {
     
     @EnvironmentObject private var weatherViewModel: WeatherViewModel
@@ -16,9 +18,9 @@ struct TravelView: View {
     
     var body: some View {
         NavigationStack {
-            GradientBackground{
+            GradientBackground {
                 List {
-                    ForEach(travelViewModel.trips) { trip in
+                    ForEach(travelViewModel.trips.sorted(by: { $0.departureDate < $1.departureDate })) { trip in
                         TravelListItemView(trip: trip)
                             .onTapGesture {
                                 selectedTrip = trip
@@ -26,13 +28,23 @@ struct TravelView: View {
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    travelViewModel.deleteTrip(trip: trip)
+                                } label: {
+                                    Label("Löschen", systemImage: "trash")
+                                }
+                            }
                     }
                 }
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
                 .background(Color.clear)
                 .navigationDestination(item: $selectedTrip) { trip in
-                    TravelDetailView(trip: trip, weatherRepo: weatherViewModel.repo)
+                    TravelDetailView(
+                        trip: trip,
+                        weatherRepo: weatherViewModel.repo
+                    )
                 }
             }
             .navigationTitle("Meine Reisen")
@@ -51,6 +63,7 @@ struct TravelView: View {
         }
     }
 }
+
 
 //#Preview {
 //    TravelView()

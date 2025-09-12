@@ -9,13 +9,14 @@ import Foundation
 
 @MainActor
 final class TravelDetailViewModel: ObservableObject {
-        
+    
     @Published var formattedDate: String
     @Published var isLoadingWeather = false
     @Published var weatherInfo: WeatherInfo?
     @Published var weatherError: String?
     
     let trip: Trip
+    private(set) var travelViewModel: TravelViewModel!  
     
     private let weatherRepo: WeatherRepository
     private let dateFormatter: DateFormatter = {
@@ -28,6 +29,11 @@ final class TravelDetailViewModel: ObservableObject {
         self.trip = trip
         self.weatherRepo = weatherRepo
         self.formattedDate = dateFormatter.string(from: trip.departureDate)
+    }
+    
+    /// Wird nach Init von außen aufgerufen, sobald EnvironmentObject verfügbar ist
+    func configure(with travelViewModel: TravelViewModel) {
+        self.travelViewModel = travelViewModel
     }
     
     func loadWeather() async {
