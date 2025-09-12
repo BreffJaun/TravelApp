@@ -7,20 +7,11 @@
 
 import Foundation
 
-import Foundation
 var dummyTrips = [
-    Trip(
-        title: "Malle ist nur 1 Mal im Jahr",
-        departure: "Frankfurt",
-        destination: "Mallorca",
-        pricePerPerson: 350.0,
-        travelers: ["Max", "Anna"],
-        departureDate: Date(),
-    ),
     Trip(
         title: "Familienurlaub",
         departure: "München",
-        destination: "Kroatien",
+        destination: "Paris",
         pricePerPerson: 280.0,
         travelers: ["Familie Müller"],
         departureDate: Calendar.current.date(byAdding: .day, value: 10, to: Date())!,
@@ -28,7 +19,7 @@ var dummyTrips = [
     Trip(
         title: "Skifahrt",
         departure: "Stuttgart",
-        destination: "Zillertal",
+        destination: "Stockholm",
         pricePerPerson: 420.0,
         travelers: ["Tom", "Lisa", "Ben"],
         departureDate: Calendar.current.date(byAdding: .month, value: 1, to: Date())!,
@@ -36,7 +27,7 @@ var dummyTrips = [
     Trip(
         title: "Städtereise",
         departure: "Berlin",
-        destination: "Barcelona",
+        destination: "London",
         pricePerPerson: 180.0,
         travelers: ["Sarah"],
         departureDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())!,
@@ -44,7 +35,7 @@ var dummyTrips = [
     Trip(
         title: "Wellness Wochenende",
         departure: "Köln",
-        destination: "Baden-Baden",
+        destination: "Amsterdam",
         pricePerPerson: 220.0,
         travelers: ["Maria", "Klaus"],
         departureDate: Calendar.current.date(byAdding: .weekOfYear, value: 2, to: Date())!,
@@ -52,7 +43,7 @@ var dummyTrips = [
     Trip(
         title: "Campingtrip",
         departure: "Hamburg",
-        destination: "Schwarzwald",
+        destination: "Helsinki",
         pricePerPerson: 90.0,
         travelers: ["Alex", "Jenny"],
         departureDate: Calendar.current.date(byAdding: .month, value: 2, to: Date())!,
@@ -60,13 +51,12 @@ var dummyTrips = [
     Trip(
         title: "Roadtrip",
         departure: "Dresden",
-        destination: "Italien",
+        destination: "Paris",
         pricePerPerson: 310.0,
         travelers: ["Marco", "Elena"],
         departureDate: Calendar.current.date(byAdding: .month, value: 3, to: Date())!,
     )
 ]
-
 
 
 

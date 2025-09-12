@@ -10,10 +10,12 @@ import SwiftUI
 struct AuthView: View {
     @StateObject private var authViewModel: AuthViewModel
     @StateObject private var weatherViewModel: WeatherViewModel
+    @StateObject private var flightViewModel: FlightViewModel
     @StateObject private var travelViewModel = TravelViewModel()
     
     init(useLocalRepository: Bool) {
         if useLocalRepository {
+            print("🟢 AuthView: Verwende LOCAL Repositories")
             _authViewModel = StateObject(
                 wrappedValue: AuthViewModel(repository: LocalUserRepository())
             )
@@ -21,13 +23,22 @@ struct AuthView: View {
             _weatherViewModel = StateObject(
                 wrappedValue: WeatherViewModel(repo: MockWeatherRepository())
             )
+            
+            _flightViewModel = StateObject(
+                wrappedValue: FlightViewModel(repo: LocalFlightRepository())
+            )
         } else {
+            print("🌐 AuthView: Verwende REMOTE Repositories (FlightAPI)")
             _authViewModel = StateObject(
                 wrappedValue: AuthViewModel(repository: RemoteUserRepository())
             )
 
             _weatherViewModel = StateObject(
                 wrappedValue: WeatherViewModel(repo: RemoteWeatherRepository())
+            )
+            
+            _flightViewModel = StateObject(
+                wrappedValue: FlightViewModel(repo: RemoteFlightRepository())
             )
         }
     }
@@ -42,6 +53,7 @@ struct AuthView: View {
                 .environmentObject(authViewModel)
                 .environmentObject(travelViewModel)
                 .environmentObject(weatherViewModel)
+                .environmentObject(flightViewModel)
         }
     }
 }
