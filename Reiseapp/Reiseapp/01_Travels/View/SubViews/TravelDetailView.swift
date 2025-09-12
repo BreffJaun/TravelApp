@@ -11,11 +11,19 @@ struct TravelDetailView: View {
     
     @StateObject private var travelDetailViewModel: TravelDetailViewModel
     @EnvironmentObject private var flightViewModel: FlightViewModel
+    @State private var showEditSheet: Bool = false
+    let trip: Trip
+
     
     init(trip: Trip, weatherRepo: WeatherRepository) {
-        _travelDetailViewModel = StateObject(wrappedValue: TravelDetailViewModel(trip: trip, weatherRepo: weatherRepo))
+        _travelDetailViewModel = StateObject(
+            wrappedValue: TravelDetailViewModel(
+                trip: trip,
+                weatherRepo: weatherRepo
+            )
+        )
+        self.trip = trip
     }
-    
     
     var body: some View {
         GradientBackground {
@@ -27,11 +35,7 @@ struct TravelDetailView: View {
                 
                 Section("Wetter") {
                     if travelDetailViewModel.isLoadingWeather {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
+                        HStack { Spacer(); ProgressView(); Spacer() }
                     } else if let info = travelDetailViewModel.weatherInfo {
                         HStack {
                             Image(systemName: info.condition.sfSymbol)
@@ -42,11 +46,9 @@ struct TravelDetailView: View {
                         }
                         .padding(.vertical, 4)
                     } else if let error = travelDetailViewModel.weatherError {
-                        Text(error)
-                            .foregroundColor(.red)
+                        Text(error).foregroundColor(.red)
                     } else {
-                        Text("Keine Wetterdaten verfügbar")
-                            .foregroundColor(.secondary)
+                        Text("Keine Wetterdaten verfügbar").foregroundColor(.secondary)
                     }
                 }
                 
@@ -81,11 +83,21 @@ struct TravelDetailView: View {
         .navigationTitle(travelDetailViewModel.trip.title)
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            travelDetailViewModel.configure(with: travelViewModel)
             await travelDetailViewModel.loadWeather()
             await travelDetailViewModel.loadFlights()
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Bearbeiten") { showEditSheet = true }
+            }
+        }
+        .sheet(isPresented: $showEditSheet) {
+            EditTripSheet(travelViewModel: travelViewModel, trip: trip)
+        }
     }
 }
+
 
 
 //#Preview {

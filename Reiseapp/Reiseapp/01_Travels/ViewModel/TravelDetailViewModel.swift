@@ -20,6 +20,7 @@ final class TravelDetailViewModel: ObservableObject {
     
     
     let trip: Trip
+    private(set) var travelViewModel: TravelViewModel!  
     
     private let weatherRepo: WeatherRepository
     private let flightRepo: FlightRepository
@@ -35,6 +36,11 @@ final class TravelDetailViewModel: ObservableObject {
         self.weatherRepo = weatherRepo
         self.flightRepo = flightRepo
         self.formattedDate = dateFormatter.string(from: trip.departureDate)
+    }
+    
+    /// Wird nach Init von außen aufgerufen, sobald EnvironmentObject verfügbar ist
+    func configure(with travelViewModel: TravelViewModel) {
+        self.travelViewModel = travelViewModel
     }
     
     func loadWeather() async {
