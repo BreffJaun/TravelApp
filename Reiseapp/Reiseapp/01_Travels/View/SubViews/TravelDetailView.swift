@@ -7,23 +7,25 @@
 
 import SwiftUI
 
+
+import SwiftUI
+
 struct TravelDetailView: View {
     
-        @StateObject private var travelDetailViewModel: TravelDetailViewModel
-        @EnvironmentObject private var travelViewModel: TravelViewModel
-        @State private var showEditSheet: Bool = false
-        let trip: Trip
-       
-    init(trip: Trip, travelViewModel: TravelViewModel, weatherRepo: WeatherRepository) {
-            _travelDetailViewModel = StateObject(
-                wrappedValue: TravelDetailViewModel(
-                    trip: trip,
-                    travelViewModel: travelViewModel,
-                    weatherRepo: weatherRepo
-                )
+    @StateObject private var travelDetailViewModel: TravelDetailViewModel
+    @EnvironmentObject private var travelViewModel: TravelViewModel
+    @State private var showEditSheet: Bool = false
+    let trip: Trip
+    
+    init(trip: Trip, weatherRepo: WeatherRepository) {
+        _travelDetailViewModel = StateObject(
+            wrappedValue: TravelDetailViewModel(
+                trip: trip,
+                weatherRepo: weatherRepo
             )
-        }
-    // später: @EnvironmentObject private var flightViewModel: FlightViewModel
+        )
+        self.trip = trip
+    }
     
     var body: some View {
         GradientBackground {
@@ -35,11 +37,7 @@ struct TravelDetailView: View {
                 
                 Section("Wetter") {
                     if travelDetailViewModel.isLoadingWeather {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
+                        HStack { Spacer(); ProgressView(); Spacer() }
                     } else if let info = travelDetailViewModel.weatherInfo {
                         HStack {
                             Image(systemName: info.condition.sfSymbol)
@@ -50,17 +48,14 @@ struct TravelDetailView: View {
                         }
                         .padding(.vertical, 4)
                     } else if let error = travelDetailViewModel.weatherError {
-                        Text(error)
-                            .foregroundColor(.red)
+                        Text(error).foregroundColor(.red)
                     } else {
-                        Text("Keine Wetterdaten verfügbar")
-                            .foregroundColor(.secondary)
+                        Text("Keine Wetterdaten verfügbar").foregroundColor(.secondary)
                     }
                 }
                 
                 Section("Günstigste Flüge") {
-                    Text("Flugdaten werden geladen …")
-                        .foregroundColor(.secondary)
+                    Text("Flugdaten werden geladen …").foregroundColor(.secondary)
                 }
             }
             .listStyle(.insetGrouped)
@@ -70,21 +65,20 @@ struct TravelDetailView: View {
         .navigationTitle(travelDetailViewModel.trip.title)
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            travelDetailViewModel.configure(with: travelViewModel)
             await travelDetailViewModel.loadWeather()
         }
         .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Bearbeiten") {
-                            showEditSheet = true
-                        }
-                    }
-                }
-        .sheet(isPresented: $showEditSheet) {
-            AddNewTripSheet(travelViewModel: travelDetailViewModel.travelViewModel)
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Bearbeiten") { showEditSheet = true }
+            }
         }
-
+        .sheet(isPresented: $showEditSheet) {
+            EditTripSheet(travelViewModel: travelViewModel, trip: trip)
+        }
     }
 }
+
 
 
 //#Preview {
