@@ -30,7 +30,7 @@ struct AuthView: View {
         } else {
             print("🌐 AuthView: Verwende REMOTE Repositories (FlightAPI)")
             _authViewModel = StateObject(
-                wrappedValue: AuthViewModel(repository: RemoteUserRepository())
+                wrappedValue: AuthViewModel(repository: LocalUserRepository())
             )
 
             _weatherViewModel = StateObject(
