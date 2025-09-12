@@ -7,15 +7,13 @@
 
 import SwiftUI
 
-
-import SwiftUI
-
 struct TravelDetailView: View {
     
     @StateObject private var travelDetailViewModel: TravelDetailViewModel
-    @EnvironmentObject private var travelViewModel: TravelViewModel
+    @EnvironmentObject private var flightViewModel: FlightViewModel
     @State private var showEditSheet: Bool = false
     let trip: Trip
+
     
     init(trip: Trip, weatherRepo: WeatherRepository) {
         _travelDetailViewModel = StateObject(
@@ -55,8 +53,28 @@ struct TravelDetailView: View {
                 }
                 
                 Section("Günstigste Flüge") {
-                    Text("Flugdaten werden geladen …").foregroundColor(.secondary)
+                    if travelDetailViewModel.isLoadingFlights {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else if let error = travelDetailViewModel.flightError {
+                        Text(error)
+                            .foregroundColor(.red)
+                    } else if travelDetailViewModel.flights.isEmpty {
+                        Text("Keine Flüge gefunden")
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(travelDetailViewModel.flights) { flight in
+                            FlightListItemView(flight: flight)
+                                .listRowInsets(EdgeInsets())
+                                .padding(.vertical, 8)
+                                .listRowSeparator(.hidden)
+                        }
+                    }
                 }
+                .listRowBackground(Color.clear)
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
@@ -67,6 +85,7 @@ struct TravelDetailView: View {
         .task {
             travelDetailViewModel.configure(with: travelViewModel)
             await travelDetailViewModel.loadWeather()
+            await travelDetailViewModel.loadFlights()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

@@ -9,40 +9,83 @@ import Foundation
 
 @MainActor
 final class FlightViewModel: ObservableObject {
-  
-    @Published var startOrt: String = ""
-    @Published var zielOrt: String = ""
-    @Published var abflugDatum: Date = Date()
- 
+    @Published var departureCity: String = ""
+    @Published var destinationCity: String = ""
+    @Published var departureDate: Date = Date()
     
-    @Published var ergebnisse: [Flight] = []
+    @Published var results: [Flight] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
-
     
-    private let repo: FlightSearchRepository
-    init(repo: FlightSearchRepository = FakeFlightSearchRepository()) { self.repo = repo }
-
+    private let repo: FlightRepository
     
+    init(repo: FlightRepository) {
+        self.repo = repo
+    }
     
-    func suchen() {
+    func search() {
         errorMessage = nil
-        let from = startOrt.trimmingCharacters(in: .whitespacesAndNewlines)
-        let to   = zielOrt.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !from.isEmpty else { errorMessage = "Bitte Startort eingeben."; return }
-        guard !to.isEmpty   else { errorMessage = "Bitte Zielort eingeben.";  return }
+        let from = departureCity.trimmingCharacters(in: .whitespacesAndNewlines)
+        let to = destinationCity.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard !from.isEmpty else {
+            errorMessage = "Bitte Startort eingeben."
+            print("⚠️ Kein Startort angegeben")
+            return
+        }
+        guard !to.isEmpty else {
+            errorMessage = "Bitte Zielort eingeben."
+            print("⚠️ Kein Zielort angegeben")
+            return
+        }
         guard from.lowercased() != to.lowercased() else {
-            errorMessage = "Start und Ziel dürfen nicht gleich sein."; return
+            errorMessage = "Start und Ziel dürfen nicht gleich sein."
+            print("⚠️ Start und Ziel sind gleich")
+            return
         }
         
-        isLoading = true; ergebnisse = []
+        isLoading = true
+        results = []
+        
+        print("🔹 FlightViewModel search() called: \(from) → \(to) from \(departureDate)")
+        
         Task {
-            do { ergebnisse = try await repo.search(from: from, to: to, earliest: abflugDatum) }
-            catch { errorMessage = (error as? LocalizedError)?.errorDescription ?? "Suche fehlgeschlagen." }
+            do {
+                let fetched = try await repo.searchFlights(from: from, to: to, earliest: departureDate, returnDate: nil)
+                
+                if fetched.isEmpty {
+                    errorMessage = "Keine Flüge gefunden."
+                    print("⚠️ FlightViewModel: Keine Flüge aus Repository zurückgegeben")
+                } else {
+                    results = fetched
+                    print("🔹 FlightViewModel: \(results.count) Flüge erhalten")
+                    for (i, f) in results.enumerated() {
+                        print("   ✈️ [\(i)] \(f.departure) → \(f.destination) am \(dateText(f.date)) für \(priceText(f.priceEUR))")
+                    }
+                }
+            } catch FlightAPIError.invalidRequest {
+                errorMessage = "Ungültige Anfrage. Bitte prüfe die Eingaben."
+                print("⚠️ FlightViewModel: InvalidRequest Error")
+            } catch {
+                if let urlError = error as? URLError, urlError.code == .timedOut {
+                    errorMessage = "Die Anfrage hat zu lange gedauert. Bitte überprüfe deine Internetverbindung."
+                    print("⚠️ FlightViewModel: Timeout")
+                } else {
+                    errorMessage = "Fehler: \(error.localizedDescription)"
+                    print("⚠️ FlightViewModel: Unbekannter Fehler: \(error)")
+                }
+            }
             isLoading = false
         }
     }
-
-    func dateText(_ d: Date) -> String { let f = DateFormatter(); f.dateStyle = .medium; return f.string(from: d) }
-    func priceText(_ v: Double) -> String { String(format: "%.2f €", v) }
+    
+    func dateText(_ d: Date) -> String {
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        return f.string(from: d)
+    }
+    
+    func priceText(_ v: Double) -> String {
+        String(format: "%.2f €", v)
+    }
 }

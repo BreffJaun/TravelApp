@@ -7,18 +7,20 @@
 
 import Foundation
 
-enum FlightAPIError: Error, LocalizedError {
+enum FlightAPIError: LocalizedError {
     case invalidRequest
-    case server
-    case decoding
+    case serverError
+    case decodingError
+    case invalidResponse
     case unknown
 
     var errorDescription: String? {
         switch self {
         case .invalidRequest: return "Ungültige Anfrage."
-        case .server:         return "Serverfehler."
-        case .decoding:       return "Antwort konnte nicht gelesen werden."
-        case .unknown:        return "Unbekannter Fehler."
+        case .serverError: return "Serverfehler."
+        case .decodingError: return "Antwort konnte nicht verarbeitet werden."
+        case .invalidResponse: return "Ungültige Antwort vom Server."
+        case .unknown: return "Unbekannter Fehler."
         }
     }
 }
