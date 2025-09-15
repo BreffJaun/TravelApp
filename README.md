@@ -8,7 +8,7 @@
 ![APIs](https://img.shields.io/badge/APIs-OpenWeatherMap%20%26%20Google%20Flights-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
-<-- <img src="Projektwoche1/Images/TravelPlanner.png" width="75%">  -->
+<img src="ReisePlaner/images/TravelApp.png" width="75%">
 
 This SwiftUI app was developed as a **team project** for a client who requested a customizable travel planning application. ✈️🌍  
 The client defined the requirements, but left the implementation details to the team. Together, we collaboratively designed and implemented the app, making use of **git branches** for structured teamwork.  
