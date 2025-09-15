@@ -62,5 +62,3 @@ struct AuthView: View {
     AuthView(useLocalRepository: true)
 }
 
-//testuser@mail.com
-//test123
